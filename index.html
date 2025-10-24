@@ -4,34 +4,66 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Clashcards — Minerals Flashcards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="app">
-      <h1 class="site-title">Clashcards — Minerals</h1>
-
-      <section class="card-area">
-        <div class="card" id="card" tabindex="0" aria-live="polite">
-          <div class="card-inner" id="card-inner">
-            <div class="card-face card-front" id="card-front">
-              <img id="card-image" src="" alt="" />
-            </div>
-            <div class="card-face card-back" id="card-back">
-              <div class="card-answer" id="card-answer"></div>
-            </div>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <button id="sidebarToggle" class="sidebar-toggle" aria-expanded="false" aria-label="Open cards list">☰</button>
+        <div class="brand">
+          <div class="logo" aria-hidden="true">⛰️</div>
+          <div class="brand-text">
+            <div class="brand-title">Clashcards</div>
+            <div class="brand-sub">Minerals flashcards</div>
           </div>
-          <div id="reviewBadge" class="review-badge" aria-hidden="true">Review</div>
         </div>
-      </section>
+        <div class="top-actions">
+          <div class="theme-pill">Geology</div>
+        </div>
+      </div>
+    </header>
 
-      <nav class="controls">
-        <button id="prevBtn" class="nav-btn" aria-label="Previous card">◀</button>
-        <div id="position" class="position">0 / 0</div>
-        <button id="nextBtn" class="nav-btn" aria-label="Next card">▶</button>
-        <button id="markBtn" class="mark-btn" aria-pressed="false">Mark for review</button>
-      </nav>
+    <!-- Collapsible left sidebar (overlay) -->
+    <aside id="sidebar" class="sidebar collapsed" aria-hidden="true">
+      <div class="sidebar-inner">
+        <div class="sidebar-head">
+          <h3>All cards</h3>
+          <button id="closeSidebar" class="close-sidebar" aria-label="Close list">←</button>
+        </div>
+        <ul id="cardList" class="card-list" role="list" aria-label="Cards list"></ul>
+      </div>
+    </aside>
 
-      <p class="hint">Click the card to flip. Use ← and → to navigate.</p>
+    <!-- Floating handle to open sidebar when fully collapsed -->
+    <button id="sidebarHandle" class="sidebar-handle" aria-label="Open cards list">▶</button>
+    <main class="app">
+      <div class="panel">
+
+        <section class="card-area">
+          <div class="card" id="card" tabindex="0" aria-live="polite">
+            <div class="card-inner" id="card-inner">
+              <div class="card-face card-front" id="card-front">
+                <img id="card-image" src="" alt="" />
+              </div>
+              <div class="card-face card-back" id="card-back">
+                <div class="card-answer" id="card-answer"></div>
+              </div>
+            </div>
+            <div id="reviewBadge" class="review-badge" aria-hidden="true">Review</div>
+          </div>
+        </section>
+
+        <nav class="controls">
+          <button id="prevBtn" class="nav-btn" aria-label="Previous card">◀</button>
+          <div id="position" class="position">0 / 0</div>
+          <button id="nextBtn" class="nav-btn" aria-label="Next card">▶</button>
+          <button id="markBtn" class="mark-btn" aria-pressed="false">Mark for review</button>
+          <button id="completeBtn" class="complete-btn" aria-pressed="false">Mark Completed</button>
+        </nav>
+
+        <p class="hint">Click the card to flip. Use ← and → to navigate.</p>
+      </div>
     </main>
 
     <script src="script.js" defer></script>

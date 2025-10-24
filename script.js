@@ -6,12 +6,21 @@ const backEl = document.getElementById('card-answer');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 const markBtn = document.getElementById('markBtn');
+const completeBtn = document.getElementById('completeBtn');
 const reviewBadge = document.getElementById('reviewBadge');
 const positionEl = document.getElementById('position');
+
+// Sidebar elements
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const closeSidebar = document.getElementById('closeSidebar');
+const cardListEl = document.getElementById('cardList');
+const sidebarHandle = document.getElementById('sidebarHandle');
 
 let cards = [];
 let index = 0;
 let reviewSet = new Set(); // store file paths marked for review
+let completeSet = new Set();
 
 async function loadCards(){
   try{
@@ -34,6 +43,7 @@ async function loadCards(){
     i.src = c.file;
   }
   loadMarks();
+  renderList();
   showCard(0);
 }
 
@@ -48,6 +58,7 @@ function showCard(i){
   // ensure card shows front (not flipped) when changing
   cardInner.classList.remove('flipped');
   updateReviewUI(current.file);
+  renderList();
 }
 
 function nextCard(){ showCard(index+1); }
@@ -66,6 +77,10 @@ nextBtn.addEventListener('click', (e)=>{ e.stopPropagation(); nextCard(); });
 markBtn.addEventListener('click', (e)=>{
   e.stopPropagation();
   toggleMarkForCurrent();
+});
+completeBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  toggleCompleteForCurrent();
 });
 
 // keyboard support
@@ -114,6 +129,113 @@ function toggleMarkForCurrent(){
   else reviewSet.add(file);
   saveMarks();
   updateReviewUI(file);
+  renderList();
+}
+
+// Completed marks
+function loadCompleted(){
+  try{
+    const raw = localStorage.getItem('completedMarks');
+    const arr = raw ? JSON.parse(raw) : [];
+    completeSet = new Set(arr);
+  }catch(err){ completeSet = new Set(); }
+}
+
+function saveCompleted(){
+  try{ localStorage.setItem('completedMarks', JSON.stringify(Array.from(completeSet))); }
+  catch(err){ console.warn('Could not save completed marks', err); }
+}
+
+function updateCompleteUI(file){
+  const done = completeSet.has(file);
+  if(done){ completeBtn.setAttribute('aria-pressed','true'); completeBtn.textContent = 'Completed'; }
+  else{ completeBtn.setAttribute('aria-pressed','false'); completeBtn.textContent = 'Mark Completed'; }
+}
+
+function toggleCompleteForCurrent(){
+  if(!cards.length) return;
+  const file = cards[index].file;
+  if(completeSet.has(file)) completeSet.delete(file);
+  else {
+    // marking completed clears review for clarity
+    reviewSet.delete(file);
+    completeSet.add(file);
+  }
+  saveCompleted();
+  saveMarks();
+  updateCompleteUI(file);
+  updateReviewUI(file);
+  renderList();
+}
+
+// Sidebar handling and list rendering
+function renderList(){
+  if(!cardListEl) return;
+  cardListEl.innerHTML = '';
+  cards.forEach((c, idx) => {
+    const li = document.createElement('li');
+    li.className = 'card-row';
+    if(idx === index) li.classList.add('active');
+    li.tabIndex = 0;
+
+    const label = document.createElement('div');
+    label.className = 'label';
+    // Only show name when completed to avoid giving away answers
+    label.textContent = `Card ${idx+1}`;
+    if(completeSet.has(c.file)){
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      // use colon and space separator as requested
+      nameSpan.textContent = `: ${c.name}`;
+      label.appendChild(nameSpan);
+    }
+
+    const badge = document.createElement('div');
+    if(completeSet.has(c.file)){
+      badge.className = 'badge completed';
+      badge.textContent = 'Completed';
+    } else if(reviewSet.has(c.file)){
+      badge.className = 'badge review';
+      badge.textContent = 'Review';
+    }
+
+    li.appendChild(label);
+    if(badge.textContent) li.appendChild(badge);
+    li.addEventListener('click', (e) => { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); });
+    li.addEventListener('keydown', (e) => { if(e.key==='Enter') { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); } });
+    cardListEl.appendChild(li);
+  });
+}
+
+// Sidebar toggle
+sidebarToggle.addEventListener('click', ()=>{
+  const expanded = sidebar.classList.toggle('expanded');
+  sidebar.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+  sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+});
+closeSidebar.addEventListener('click', ()=>{
+  sidebar.classList.remove('expanded');
+  sidebar.setAttribute('aria-hidden','true');
+  sidebarToggle.setAttribute('aria-expanded','false');
+});
+
+// Floating handle opens sidebar
+if(sidebarHandle){
+  sidebarHandle.addEventListener('click', ()=>{
+    sidebar.classList.add('expanded');
+    sidebar.setAttribute('aria-hidden','false');
+    sidebarToggle.setAttribute('aria-expanded','true');
+  });
+}
+
+// load both mark sets
+function loadMarks(){
+  try{
+    const raw = localStorage.getItem('reviewMarks');
+    const arr = raw ? JSON.parse(raw) : [];
+    reviewSet = new Set(arr);
+  }catch(err){ reviewSet = new Set(); }
+  loadCompleted();
 }
 
 loadCards();
