@@ -175,9 +175,18 @@ function renderList(){
     li.className = 'card-row';
     if(idx === index) li.classList.add('active');
     li.tabIndex = 0;
+
     const label = document.createElement('div');
     label.className = 'label';
-    label.textContent = `Card ${idx+1} — ${c.name}`;
+    // Only show name when completed to avoid giving away answers
+    label.textContent = `Card ${idx+1}`;
+    if(completeSet.has(c.file)){
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      nameSpan.textContent = ` — ${c.name}`;
+      label.appendChild(nameSpan);
+    }
+
     const badge = document.createElement('div');
     if(completeSet.has(c.file)){
       badge.className = 'badge completed';
@@ -186,10 +195,11 @@ function renderList(){
       badge.className = 'badge review';
       badge.textContent = 'Review';
     }
+
     li.appendChild(label);
     if(badge.textContent) li.appendChild(badge);
-    li.addEventListener('click', (e) => { showCard(idx); });
-    li.addEventListener('keydown', (e) => { if(e.key==='Enter') showCard(idx); });
+    li.addEventListener('click', (e) => { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); });
+    li.addEventListener('keydown', (e) => { if(e.key==='Enter') { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); } });
     cardListEl.appendChild(li);
   });
 }
