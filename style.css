@@ -36,6 +36,14 @@ body{
 .app .panel{margin-top:0}
 .site-title{font-size:1.1rem;margin:0 0 12px;color:#222}
 
+/* Shift and resize main content when sidebar is open */
+body.sidebar-open .app{margin-left:calc(var(--sidebar-width) / 2);transition:margin-left 320ms ease}
+body.sidebar-open .card{width:min(60vw,720px);max-width:720px;height:min(64vh,560px)}
+body.sidebar-open .nav-btn{padding:10px 12px}
+/* When sidebar is closed (no class), larger happy card */
+body:not(.sidebar-open) .card{width:min(78vw,880px);max-width:880px;height:min(76vh,680px)}
+body:not(.sidebar-open) .nav-btn{padding:14px 16px}
+
 /* Sidebar (overlay) */
 .sidebar-toggle{background:transparent;border:0;color:#fff;font-size:18px;padding:6px 8px;margin-right:8px;cursor:pointer}
 .sidebar{position:fixed;left:0;top:var(--header-height);bottom:0;width:var(--sidebar-width);background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:2px 6px 28px rgba(10,20,10,0.06);z-index:50;transform:translateX(-100%);transition:transform 300ms ease;display:flex;flex-direction:column}
@@ -130,3 +138,15 @@ body{
 
 /* Accessibility focus */
 .nav-btn:focus, .card:focus{outline:3px solid rgba(0,120,212,0.12);outline-offset:4px}
+
+/* Stronger overrides placed at the end so they take precedence over earlier duplicate rules. */
+/* Shift panel when sidebar open and resize the card inside the panel. Use transform to shift visually without breaking centering. */
+.panel{position:relative;will-change:transform}
+body.sidebar-open .panel{transform:translateX(calc(var(--sidebar-width) / 2 - 40px)) !important;transition:transform 320ms ease}
+body.sidebar-open .panel .card{width:min(60vw,720px) !important;max-width:720px !important;height:min(64vh,560px) !important}
+body.sidebar-open .panel .nav-btn{padding:10px 12px !important}
+
+body:not(.sidebar-open) .panel{transform:none !important}
+body:not(.sidebar-open) .panel .card{width:min(78vw,880px) !important;max-width:880px !important;height:min(76vh,680px) !important}
+body:not(.sidebar-open) .panel .nav-btn{padding:14px 16px !important}
+

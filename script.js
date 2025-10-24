@@ -201,8 +201,8 @@ function renderList(){
 
     li.appendChild(label);
     if(badge.textContent) li.appendChild(badge);
-    li.addEventListener('click', (e) => { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); });
-    li.addEventListener('keydown', (e) => { if(e.key==='Enter') { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); } });
+  li.addEventListener('click', (e) => { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); document.body.classList.remove('sidebar-open'); });
+  li.addEventListener('keydown', (e) => { if(e.key==='Enter') { showCard(idx); sidebar.classList.remove('expanded'); sidebar.setAttribute('aria-hidden','true'); sidebarToggle.setAttribute('aria-expanded','false'); document.body.classList.remove('sidebar-open'); } });
     cardListEl.appendChild(li);
   });
 }
@@ -212,11 +212,13 @@ sidebarToggle.addEventListener('click', ()=>{
   const expanded = sidebar.classList.toggle('expanded');
   sidebar.setAttribute('aria-hidden', expanded ? 'false' : 'true');
   sidebarToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  if(expanded) document.body.classList.add('sidebar-open'); else document.body.classList.remove('sidebar-open');
 });
 closeSidebar.addEventListener('click', ()=>{
   sidebar.classList.remove('expanded');
   sidebar.setAttribute('aria-hidden','true');
   sidebarToggle.setAttribute('aria-expanded','false');
+  document.body.classList.remove('sidebar-open');
 });
 
 // Floating handle opens sidebar
@@ -225,6 +227,7 @@ if(sidebarHandle){
     sidebar.classList.add('expanded');
     sidebar.setAttribute('aria-hidden','false');
     sidebarToggle.setAttribute('aria-expanded','true');
+    document.body.classList.add('sidebar-open');
   });
 }
 
