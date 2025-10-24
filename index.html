@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Clashcards — Minerals Flashcards</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1 class="site-title">Clashcards — Minerals</h1>
+
+      <section class="card-area">
+        <div class="card" id="card" tabindex="0" aria-live="polite">
+          <div class="card-inner" id="card-inner">
+            <div class="card-face card-front" id="card-front">
+              <img id="card-image" src="" alt="" />
+            </div>
+            <div class="card-face card-back" id="card-back">
+              <div class="card-answer" id="card-answer"></div>
+            </div>
+          </div>
+          <div id="reviewBadge" class="review-badge" aria-hidden="true">Review</div>
+        </div>
+      </section>
+
+      <nav class="controls">
+        <button id="prevBtn" class="nav-btn" aria-label="Previous card">◀</button>
+        <div id="position" class="position">0 / 0</div>
+        <button id="nextBtn" class="nav-btn" aria-label="Next card">▶</button>
+        <button id="markBtn" class="mark-btn" aria-pressed="false">Mark for review</button>
+      </nav>
+
+      <p class="hint">Click the card to flip. Use ← and → to navigate.</p>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
