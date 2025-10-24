@@ -7,8 +7,8 @@
   --brand-1: #1f6f4a; /* deep geology green */
   --brand-2: #7bd18a; /* light green */
   --header-height: 68px;
-  --sidebar-width: 340px;
-  --sidebar-tab: 56px; /* visible tab when collapsed */
+  --sidebar-width: 380px;
+  --sidebar-tab: 68px; /* visible tab when collapsed (wider) */
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -38,7 +38,7 @@ body{
 
 /* Sidebar (overlay) */
 .sidebar-toggle{background:transparent;border:0;color:#fff;font-size:18px;padding:6px 8px;margin-right:8px;cursor:pointer}
-.sidebar{position:fixed;left:0;top:var(--header-height);bottom:0;width:var(--sidebar-width);background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:2px 6px 28px rgba(10,20,10,0.06);z-index:50;transform:translateX(calc(-1 * (var(--sidebar-width) - var(--sidebar-tab))));transition:transform 300ms ease;display:flex;flex-direction:column}
+.sidebar{position:fixed;left:0;top:var(--header-height);bottom:0;width:var(--sidebar-width);background:linear-gradient(180deg,#fff,#fbfbfb);box-shadow:2px 6px 28px rgba(10,20,10,0.06);z-index:50;transform:translateX(-100%);transition:transform 300ms ease;display:flex;flex-direction:column}
 .sidebar.expanded{transform:translateX(0)}
 .sidebar-inner{padding:12px 12px 24px 12px;overflow:auto}
 .sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
@@ -50,6 +50,29 @@ body{
 .card-row .label{font-size:0.95rem;color:#222;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge{font-weight:700;padding:4px 8px;border-radius:999px;font-size:0.78rem;flex:0 0 auto}
 .card-row .name{margin-left:8px;color:#3b3b3b;opacity:0.95}
+
+/* Improve card and controls visuals */
+.card-area{display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.card{width:min(72vw,820px);max-width:820px;height:min(72vh,620px);position:relative;perspective:1400px;cursor:pointer;margin:0 auto}
+.card-face{border-radius:14px}
+.card-front img{width:100%;height:100%;object-fit:contain;background:#f8f8f8}
+.card-face{box-shadow:0 18px 50px rgba(8,16,14,0.08);border:1px solid rgba(0,0,0,0.04)}
+
+.controls{display:flex;align-items:center;justify-content:center;gap:16px;margin:18px 0}
+.nav-btn{background:#fff;border:0;padding:12px 14px;border-radius:10px;cursor:pointer;box-shadow:0 6px 18px rgba(18,24,33,0.07);font-size:1.05rem;display:inline-flex;align-items:center;justify-content:center;min-width:48px}
+.nav-btn:hover{transform:translateY(-2px)}
+.nav-btn:active{transform:translateY(0)}
+.nav-btn svg{width:18px;height:18px}
+
+.mark-btn,.complete-btn{background:linear-gradient(180deg,#fff 0%,#f7fff9 100%);border:1px solid rgba(30,120,70,0.08);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--brand-1);box-shadow:0 8px 22px rgba(18,24,33,0.06)}
+.mark-btn[aria-pressed="true"]{background:#fff8e6;border-color:#f0d87a}
+.complete-btn{background:linear-gradient(180deg,#e9fff2 0%,#fff 100%);border:1px solid rgba(20,120,60,0.12);color:#176a3b}
+.complete-btn[aria-pressed="true"]{background:#dff6e6;border-color:#1a8b4b}
+
+.position{color:var(--muted);min-width:72px;text-align:center}
+
+/* Make panel feel happier */
+.panel{background:linear-gradient(180deg,#ffffff, #fbfbfb);padding:24px;border-radius:14px;box-shadow:0 20px 60px rgba(10,20,10,0.04)}
 .badge.review{background:#fff3b0;color:#6b4b00}
 .badge.completed{background:#dff6e6;color:#156b36}
 
@@ -57,8 +80,17 @@ body{
 .panel{max-width:920px;margin:20px auto}
 
 @media (max-width:900px){
-  .sidebar{width:260px;transform:translateX(-260px)}
+  .sidebar{width:260px;transform:translateX(-100%)}
   .sidebar.expanded{transform:translateX(0)}
+}
+
+/* Floating handle to open sidebar when collapsed */
+.sidebar-handle{position:fixed;left:8px;top:50%;transform:translateY(-50%);z-index:60;background:var(--brand-1);color:#fff;border:0;border-radius:999px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.12);cursor:pointer;font-size:18px}
+.sidebar.expanded + .sidebar-handle{display:none}
+
+/* hide handle on small screens if overlapping */
+@media (max-width:480px){
+  .sidebar-handle{left:6px;width:38px;height:38px}
 }
 .card-area{display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
 .card{width:min(78vw,700px);max-width:700px;height:min(70vh,500px);position:relative;perspective:1400px;cursor:pointer;margin:0 auto}

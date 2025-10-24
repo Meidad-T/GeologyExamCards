@@ -15,6 +15,7 @@ const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 const closeSidebar = document.getElementById('closeSidebar');
 const cardListEl = document.getElementById('cardList');
+const sidebarHandle = document.getElementById('sidebarHandle');
 
 let cards = [];
 let index = 0;
@@ -128,6 +129,7 @@ function toggleMarkForCurrent(){
   else reviewSet.add(file);
   saveMarks();
   updateReviewUI(file);
+  renderList();
 }
 
 // Completed marks
@@ -183,7 +185,8 @@ function renderList(){
     if(completeSet.has(c.file)){
       const nameSpan = document.createElement('span');
       nameSpan.className = 'name';
-      nameSpan.textContent = ` — ${c.name}`;
+      // use colon and space separator as requested
+      nameSpan.textContent = `: ${c.name}`;
       label.appendChild(nameSpan);
     }
 
@@ -215,6 +218,15 @@ closeSidebar.addEventListener('click', ()=>{
   sidebar.setAttribute('aria-hidden','true');
   sidebarToggle.setAttribute('aria-expanded','false');
 });
+
+// Floating handle opens sidebar
+if(sidebarHandle){
+  sidebarHandle.addEventListener('click', ()=>{
+    sidebar.classList.add('expanded');
+    sidebar.setAttribute('aria-hidden','false');
+    sidebarToggle.setAttribute('aria-expanded','true');
+  });
+}
 
 // load both mark sets
 function loadMarks(){
