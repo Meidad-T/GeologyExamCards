@@ -22,7 +22,7 @@ Project files added
 - `index.html` — main UI
 - `style.css` — styles and flip animation
 - `script.js` — loads `images.json` and handles flipping/navigation
-- `images.json` — generated listing of images in `minerals/`
+- `images.json` — listing of images in `minerals/`
 
 Notes
 - If you add or remove images from `minerals/`, update `images.json` (or ask me to regenerate it). Filenames in `images.json` are used as provided; the `name` field is used on the back of the card.
